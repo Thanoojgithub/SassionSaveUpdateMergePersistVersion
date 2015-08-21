@@ -66,7 +66,9 @@ Sassion - Save Update Merge Persist Version
 	17-08-2015 01:47:01 2950 [main] INFO  c.h.S.app.App - Emp : Employee [eId=26, eName=sriram, ver=2] 
 	
 	3. UPDATE
-	Hibernate: delete from mydb.employee
+	emp.seteName("sriram");
+	session2.update(emp);
+
 	Hibernate: select nextval ('employeeIdGen')
 	Hibernate: /* insert com.hibernate.SassionSaveUpdateMergePersistVersion.pojo.Employee */ insert into mydb.employee (eName, VERSION, EID) values (?, ?, ?)
 	Hibernate: /* update com.hibernate.SassionSaveUpdateMergePersistVersion.pojo.Employee */ update mydb.employee set eName=?, VERSION=? where EID=? and VERSION=?

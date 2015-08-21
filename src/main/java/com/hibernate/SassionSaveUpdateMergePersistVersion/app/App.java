@@ -48,9 +48,21 @@ public class App {
 			 */
 			//session2.save(emp);
 			/*
-			 * merge() will call a update operation to update same instance in DB.
+			 * merge() will call load() and then call update() operation to update same instance in DB.
 			 */
 			Object merge = session2.merge(emp);
+			Employee employee1 = new Employee("raghuram");
+			/*
+			 * merge, if the  first call insert, then update on the same record
+			 * Hibernate: select nextval ('employeeIdGen')
+			   Hibernate: insert into mydb.employee (eName, VERSION, EID) values (?, ?, ?)
+			   Hibernate: update mydb.employee set eName=?, VERSION=? where EID=? and VERSION=?
+			 * 
+			 */
+			System.out.println("when using merge for save - before save call");
+			session2.merge(employee1);
+			session2.flush();
+			System.out.println("when using merge for save - after save call");
 			tx2.commit();
 			session2.close();
 			session3 = sessionFactory.openSession();

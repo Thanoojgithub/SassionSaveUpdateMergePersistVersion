@@ -32,8 +32,8 @@ Sassion - Save Update Merge Persist Version
 			/*
 			 * merge, if the  first call insert, then update on the same record
 			 * Hibernate: select nextval ('employeeIdGen')
-			   Hibernate: insert into mydb.employee (eName, VERSION, EID) values (?, ?, ?)
-			   Hibernate: update mydb.employee set eName=?, VERSION=? where EID=? and VERSION=?
+			 * Hibernate: insert into mydb.employee (eName, VERSION, EID) values (?, ?, ?)
+			 * Hibernate: update mydb.employee set eName=?, VERSION=? where EID=? and VERSION=?
 			 * 
 			 */
 			System.out.println("when using merge for save - before save call");

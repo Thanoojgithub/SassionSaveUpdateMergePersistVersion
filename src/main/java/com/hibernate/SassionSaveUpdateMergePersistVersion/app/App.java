@@ -60,6 +60,10 @@ public class App {
 			for (Employee empTemp : employees) {
 				logger.info("Emp : "+empTemp);
 			}
+			/**
+			 * RESART - SEQUENCE
+			 */
+			session3.createSQLQuery("ALTER SEQUENCE employeeIdGen RESTART").executeUpdate();
 			session3.close();
 		} catch (RuntimeException e) {
 			try {

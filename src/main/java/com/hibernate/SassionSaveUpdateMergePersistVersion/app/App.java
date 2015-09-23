@@ -38,11 +38,15 @@ public class App {
 			employee.seteName("rajaram");
 			//Serializable eId = session1.save(employee);
 			Employee emp = (Employee)session1.get(Employee.class, eId);
+			emp.seteName("sriram");
+			Employee emp1 = (Employee)session1.get(Employee.class, eId);
+			emp1.seteName("sriram");
+			session1.update(emp1);
 			tx1.commit();
 			session1.close();
 			session2 = sessionFactory.openSession();
 			tx2 = session2.beginTransaction();
-			employee.seteName("sriram");
+			
 			/*
 			 * save() will call a insert operation to insert same instance as new record in DB.
 			 */
@@ -50,7 +54,12 @@ public class App {
 			/*
 			 * merge() will call load() and then call update() operation to update same instance in DB.
 			 */
-			Object merge = session2.merge(emp);
+			//Object merge = session2.merge(emp);
+			emp.seteName("sriram");
+			System.out.println("session2.update(emp) before");
+			//session2.flush();
+			session2.update(emp);
+			System.out.println("session2.update(emp) after");
 			Employee employee1 = new Employee("raghuram");
 			/*
 			 * merge, if the  first call insert, then update on the same record
@@ -60,8 +69,8 @@ public class App {
 			 * 
 			 */
 			System.out.println("when using merge for save - before save call");
-			session2.merge(employee1);
-			session2.flush();
+			// persist, will do save, but, it will not save an entity having(setting) ID
+			session2.persist(employee1);
 			System.out.println("when using merge for save - after save call");
 			tx2.commit();
 			session2.close();

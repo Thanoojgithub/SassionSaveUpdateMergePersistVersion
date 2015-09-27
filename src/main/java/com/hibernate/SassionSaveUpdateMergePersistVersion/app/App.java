@@ -18,6 +18,107 @@ public class App {
 	static org.slf4j.Logger logger = LoggerFactory.getLogger(App.class);
 
 	public static void main(String[] args) {
+		//hibernatemethodsOne();
+		//hibernatemethodsTwo();
+		//hibernatemethodsThree();
+		addOrUpdateAnEmployee();
+		//displayAllEmployees();
+		//deleteAllEmployee();
+		
+	}
+	
+	private static void addOrUpdateAnEmployee() {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		Employee employee = new Employee("sriram");
+		/* Merge :
+		 * Copy the state of the given object onto the persistent object with the same identifier. If there is no persistent instance currently associated with the session, it will be loaded. Return the persistent instance.
+		 * merge, it will first load entity with ID, then, it will check whether loaded object is equal with detached object or not, if NOT Equal, then only it will call update against entity.
+		 * 
+		 * Update :
+		 * it will just do call update operation against the detached object.
+		 * Note:
+		 * If you do call update() against transient object, then it will throw an identifier
+		 * If you do call merge() against transient object, then it will insert it as a new record into DB, with the generated identifier
+		 */
+		//session.update(employee);
+		//Employee merge = (Employee) session.merge(employee);
+		Employee emp = (Employee)session.get(Employee.class, 13);
+		emp.seteName("sriram");
+		session.merge(emp);
+		tx.commit();
+		session.close();
+	}
+
+	public static void deleteAllEmployee() {
+		Session session1 = HibernateUtil.getSessionFactory().openSession();
+		session1.createSQLQuery("delete from mydb.employee").executeUpdate();
+		session1.createSQLQuery("ALTER SEQUENCE employeeIdGen RESTART").executeUpdate();
+		session1.close();
+	}
+	
+	public static void displayAllEmployees(){
+		Session  session = HibernateUtil.getSessionFactory().openSession();
+		Query query = session.createQuery("from employee");
+		@SuppressWarnings("unchecked")
+		List<Employee> employees = (List<Employee>)query.list();
+		for (Employee empTemp : employees) {
+			logger.info("Emp : "+empTemp);
+		}
+		session.close();
+	}
+
+	
+	private static void hibernatemethodsTwo(){
+		Session session1 = null;
+		Transaction tx1 = null;
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		try {
+			session1 = sessionFactory.openSession();
+			tx1 = session1.beginTransaction();
+			/*
+			 * using load(), if we try to set/edit or update detached object, then, it will throw
+			 * org.hibernate.LazyInitializationException: could not initialize proxy - no Session
+			 * Employee emp = (Employee)session1.load(Employee.class, 1);
+			 */
+			Employee emp = (Employee)session1.get(Employee.class, 1);
+			tx1.commit();
+			session1.close();
+			emp.seteName("sriram");
+			System.out.println("different session start");
+			Session session2 = sessionFactory.openSession();
+			Transaction tx2 = session2.beginTransaction();
+			/*
+			 * update, it will just do call update operation against the detached entity.
+			 * merge, it will first load entity with ID, then, it will check whether loaded object is equal or not, if NOT Equal, then only it will call update against entity.
+			 */
+			session2.update(emp);
+			tx2.commit();
+			session2.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	private static void hibernatemethodsThree(){
+		Session session1 = null;
+		Transaction tx1 = null;
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		try {
+			session1 = sessionFactory.openSession();
+			tx1 = session1.beginTransaction();
+			Employee emp = (Employee)session1.get(Employee.class, 1);
+ 			emp = (Employee)session1.get(Employee.class, 1);
+			emp.seteName("sriram");
+			session1.update(emp);
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			tx1.commit();
+			session1.close();
+		}
+	}
+	private static void hibernatemethodsOne() {
 		logger.info(" ****** Sassion Save Update Merge Persist Version **** ");
 		Session session1 = null;
 		Session session2 = null;

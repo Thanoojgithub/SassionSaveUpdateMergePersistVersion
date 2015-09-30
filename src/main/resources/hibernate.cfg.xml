@@ -27,7 +27,9 @@
 		<property name="c3p0.autoCommitOnClose">true</property>
 		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
 		
-		<mapping class="com.hibernate.SassionSaveUpdateMergePersistVersion.pojo.Employee"></mapping>
+		<mapping class="com.hibernate.SassionSaveUpdateMergePersistVersion.pojo.Employee"/>
+		<mapping class="com.hibernate.SassionSaveUpdateMergePersistVersion.pojo.Customer" />
+		
 	</session-factory>
 </hibernate-configuration>
 

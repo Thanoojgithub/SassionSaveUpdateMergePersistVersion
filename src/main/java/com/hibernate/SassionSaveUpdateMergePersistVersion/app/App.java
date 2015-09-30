@@ -1,6 +1,8 @@
 package com.hibernate.SassionSaveUpdateMergePersistVersion.app;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -10,6 +12,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.slf4j.LoggerFactory;
 
+import com.hibernate.SassionSaveUpdateMergePersistVersion.pojo.Customer;
+import com.hibernate.SassionSaveUpdateMergePersistVersion.pojo.CustomerCID;
 import com.hibernate.SassionSaveUpdateMergePersistVersion.pojo.Employee;
 
 
@@ -21,12 +25,33 @@ public class App {
 		//hibernatemethodsOne();
 		//hibernatemethodsTwo();
 		//hibernatemethodsThree();
-		addOrUpdateAnEmployee();
+		//addOrUpdateAnEmployee();
 		//displayAllEmployees();
 		//deleteAllEmployee();
+		addCustomerUsingCompositeKeyCIdCName();
 		
 	}
 	
+	private static void addCustomerUsingCompositeKeyCIdCName() {
+		List<Customer> customers = new ArrayList<>();
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		SQLQuery query = session.createSQLQuery("delete from mydb.customer");
+		query.addEntity(Customer.class);
+		query.executeUpdate();
+		customers.add(new Customer(new CustomerCID(1, "ram"), "Bangalore", new Date()));
+		customers.add(new Customer(new CustomerCID(1, "raghu"), "Chennai", new Date()));
+		customers.add(new Customer(new CustomerCID(2, "ram"), "Hyderabad", new Date()));
+		customers.add(new Customer(new CustomerCID(2, "raghu"), "Bangalore", new Date()));
+		for (Customer customer : customers) {
+			session.save(customer);
+			session.flush();
+			session.clear();
+		}
+		tx.commit();
+		session.close();
+	}
+
 	private static void addOrUpdateAnEmployee() {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction tx = session.beginTransaction();
